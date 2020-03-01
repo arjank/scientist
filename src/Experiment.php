@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Scientist;
 
 use Scientist\Chances\Chance;
@@ -41,14 +43,14 @@ class Experiment
     /**
      * Trial callbacks.
      *
-     * @var array
+     * @var Trial[]
      */
     protected $trials = [];
 
     /**
      * Parameters for our callbacks.
      *
-     * @var array
+     * @var mixed[]
      */
     protected $params = [];
 
@@ -62,7 +64,7 @@ class Experiment
     /**
      * Matcher for experiment values.
      *
-     * @var \Scientist\Matchers\Matcher
+     * @var Matcher
      */
     protected $matcher;
 
@@ -76,23 +78,18 @@ class Experiment
     /**
      * Create a new experiment.
      *
-     * @param string                $name
-     * @param \Scientist\Laboratory $laboratory
+     * @param string $name
+     * @param Laboratory $laboratory
      */
-    public function __construct($name, Laboratory $laboratory)
+    public function __construct(string $name, Laboratory $laboratory)
     {
         $this->name = $name;
         $this->laboratory = $laboratory;
-        $this->matcher = new StandardMatcher;
-        $this->chance = new StandardChance;
+        $this->matcher = new StandardMatcher();
+        $this->chance = new StandardChance();
     }
 
-    /**
-     * Fetch the experiment name.
-     *
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -100,9 +97,9 @@ class Experiment
     /**
      * Retrieve the laboratory instance.
      *
-     * @return \Scientist\Laboratory|null
+     * @return \Scientist\Laboratory
      */
-    public function getLaboratory()
+    public function getLaboratory(): Laboratory
     {
         return $this->laboratory;
     }
@@ -128,11 +125,14 @@ class Experiment
      *
      * @return callable
      */
-    public function getControl()
+    public function getControl(): callable
     {
         return $this->control;
     }
 
+    /**
+     * @return mixed
+     */
     public function getControlContext()
     {
         return $this->controlContext;
@@ -143,10 +143,11 @@ class Experiment
      *
      * @param string   $name
      * @param callable $callback
+     * @param mixed $context
      *
      * @return $this
      */
-    public function trial($name, callable $callback, $context = null)
+    public function trial($name, callable $callback, $context = null): self
     {
         $this->trials[$name] = new Trial($name, $callback, $context);
 
@@ -158,7 +159,7 @@ class Experiment
      *
      * @param string $name
      *
-     * @return mixed
+     * @return callable
      */
     public function getTrial($name)
     {
@@ -168,7 +169,7 @@ class Experiment
     /**
      * Fetch an array of trial callbacks.
      *
-     * @return array
+     * @return Trial[]
      */
     public function getTrials()
     {
@@ -178,7 +179,7 @@ class Experiment
     /**
      * Set a matcher for this experiment.
      *
-     * @param \Scientist\Matchers\Matcher $matcher
+     * @param Matcher $matcher
      *
      * @return $this
      */
@@ -192,7 +193,7 @@ class Experiment
     /**
      * Get the matcher for this experiment.
      *
-     * @return \Scientist\Matchers\Matcher
+     * @return Matcher
      */
     public function getMatcher()
     {
@@ -202,7 +203,7 @@ class Experiment
     /**
      * Set the execution chance.
      *
-     * @param Chances\Chance $chance
+     * @param Chance $chance
      *
      * @return $this
      */
@@ -216,7 +217,7 @@ class Experiment
     /**
      * Get the execution chance.
      *
-     * @return Chances\Chance
+     * @return Chance
      */
     public function getChance()
     {
@@ -237,7 +238,7 @@ class Experiment
     /**
      * Get the experiment parameters.
      *
-     * @return array
+     * @return mixed[]
      */
     public function getParams()
     {
@@ -259,7 +260,7 @@ class Experiment
     /**
      * Execute the experiment and return a report.
      *
-     * @return \Scientist\Report
+     * @return Report
      */
     public function report()
     {

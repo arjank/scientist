@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Scientist;
 
 use Scientist\Journals\Journal;
@@ -17,18 +19,17 @@ class Laboratory
     /**
      * Collection of journals to report to.
      *
-     * @var \Scientist\Journals\Journal[]
+     * @var Journal[]
      */
     protected $journals = [];
 
     /**
      * Register a collection of journals.
      *
-     * @param array $journals
-     *
-     * @return $this
+     * @param Journal[] $journals
+     * @return Laboratory
      */
-    public function setJournals(array $journals = [])
+    public function setJournals(array $journals): self
     {
         $this->journals = [];
         foreach ($journals as $journal) {
@@ -41,7 +42,7 @@ class Laboratory
     /**
      * Register a new journal.
      *
-     * @param \Scientist\Journals\Journal $journal
+     * @param Journal $journal
      *
      * @return $this
      */
@@ -55,7 +56,7 @@ class Laboratory
     /**
      * Retrieve registers journals.
      *
-     * @return array
+     * @return Journal[]
      */
     public function getJournals()
     {
@@ -77,7 +78,7 @@ class Laboratory
     /**
      * Run an experiment.
      *
-     * @param \Scientist\Experiment $experiment
+     * @param Experiment $experiment
      *
      * @return mixed
      */
@@ -88,22 +89,24 @@ class Laboratory
             return $report->getControl()->getValue();
         }
 
-        return call_user_func_array(
-            $experiment->getControl(),
-            $experiment->getParams()
-        );
+        return $experiment->getControl()(...$experiment->getParams());
+
+//        return call_user_func_array(
+//            $experiment->getControl(),
+//            $experiment->getParams()
+//        );
     }
 
     /**
      * Run an experiment and return the result.
      *
-     * @param \Scientist\Experiment $experiment
+     * @param Experiment $experiment
      *
-     * @return \Scientist\Report
+     * @return Report
      */
     public function getReport(Experiment $experiment)
     {
-        $report = (new Intern)->run($experiment);
+        $report = (new Intern())->run($experiment);
         $this->reportToJournals($experiment, $report);
 
         return $report;
@@ -112,8 +115,8 @@ class Laboratory
     /**
      * Report experiment result to registered journals.
      *
-     * @param \Scientist\Experiment $experiment
-     * @param \Scientist\Report     $report
+     * @param Experiment $experiment
+     * @param Report $report
      *
      * @return void
      */

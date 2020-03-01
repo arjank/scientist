@@ -1,26 +1,27 @@
 <?php
 
-use Scientist\Experiment;
-use Scientist\Laboratory;
+namespace Scientist;
+
+use PHPUnit\Framework\TestCase;
 use Scientist\Matchers\StandardMatcher;
 
-class ExperimentTest extends \PHPUnit\Framework\TestCase
+class ExperimentTest extends TestCase
 {
-    public function test_that_a_new_experiment_can_be_created()
+    public function testThatANewExperimentCanBeCreated()
     {
-        $e = new Experiment('test experiment', new Laboratory);
+        $e = new Experiment('test experiment', new Laboratory());
         $this->assertInstanceOf(Experiment::class, $e);
     }
 
-    public function test_that_experiment_name_is_set()
+    public function testThatExperimentNameIsSet()
     {
-        $e = new Experiment('test experiment', new Laboratory);
+        $e = new Experiment('test experiment', new Laboratory());
         $this->assertEquals('test experiment', $e->getName());
     }
 
-    public function test_that_a_control_callback_can_be_defined()
+    public function testThatAControlCallbackCanBeDefined()
     {
-        $e = new Experiment('test experiment', new Laboratory);
+        $e = new Experiment('test experiment', new Laboratory());
         $control = function () {
             return true;
         };
@@ -28,28 +29,28 @@ class ExperimentTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($control, $e->getControl());
     }
 
-    public function test_that_control_context_defaults_to_null()
+    public function testThatControlContextDefaultsToNull()
     {
-        $e = new Experiment('test experiment', new Laboratory);
+        $e = new Experiment('test experiment', new Laboratory());
         $e->control(function () {
             return true;
         });
         $this->assertNull($e->getControlContext());
     }
 
-    public function test_that_control_context_can_be_defined()
+    public function testThatControlContextCanBeDefined()
     {
         $context = ['foo' => 'bar'];
-        $e = new Experiment('test experiment', new Laboratory);
+        $e = new Experiment('test experiment', new Laboratory());
         $e->control(function () {
             return true;
         }, $context);
         $this->assertSame($context, $e->getControlContext());
     }
 
-    public function test_that_a_trial_callback_can_be_defined()
+    public function testThatATrialCallbackCanBeDefined()
     {
-        $e = new Experiment('test experiment', new Laboratory);
+        $e = new Experiment('test experiment', new Laboratory());
         $trial = function () {
             return true;
         };
@@ -57,9 +58,9 @@ class ExperimentTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($trial, $e->getTrial('trial'));
     }
 
-    public function test_that_multiple_trial_callbacks_can_be_defined()
+    public function testThatMultipleTrialCallbacksCanBeDefined()
     {
-        $e = new Experiment('test experiment', new Laboratory);
+        $e = new Experiment('test experiment', new Laboratory());
         $first = function () {
             return 'first';
         };
@@ -78,51 +79,55 @@ class ExperimentTest extends \PHPUnit\Framework\TestCase
             'third',
         ];
         $trials = $e->getTrials();
-        $this->assertSame($expected, \array_keys($trials));
-        $this->assertContainsOnlyInstancesOf(\Scientist\Trial::class, $trials);
+        $this->assertSame($expected, array_keys($trials));
+        $this->assertContainsOnlyInstancesOf(Trial::class, $trials);
     }
 
-    public function test_that_a_chance_variable_can_be_set()
+    public function testThatAChanceVariableCanBeSet()
     {
         $chance = $this->createMock('\Scientist\Chances\Chance');
-        $e = new Experiment('test experiment', new Laboratory);
+        $e = new Experiment('test experiment', new Laboratory());
         $e->chance($chance);
         $this->assertEquals($chance, $e->getChance());
     }
 
-    public function test_that_an_experiment_matcher_can_be_set()
+    public function testThatAnExperimentMatcherCanBeSet()
     {
-        $e = new Experiment('test experiment', new Laboratory);
-        $e->matcher(new StandardMatcher);
+        $e = new Experiment('test experiment', new Laboratory());
+        $e->matcher(new StandardMatcher());
         $this->assertInstanceOf(StandardMatcher::class, $e->getMatcher());
     }
 
-    public function test_that_an_experiment_laboratory_can_be_set()
+    public function testThatAnExperimentLaboratoryCanBeSet()
     {
-        $l = new Laboratory;
+        $l = new Laboratory();
         $e = new Experiment('test experiment', $l);
         $this->assertInstanceOf(Laboratory::class, $e->getLaboratory());
         $this->assertSame($l, $e->getLaboratory());
     }
 
-    public function test_that_running_experiment_with_no_laboratory_executes_control()
+    public function testThatRunningExperimentWithNoLaboratoryExecutesControl()
     {
-        $e = new Experiment('test experiment', new Laboratory);
-        $e->control(function () { return 'foo'; });
+        $e = new Experiment('test experiment', new Laboratory());
+        $e->control(function () {
+            return 'foo';
+        });
         $v = $e->run();
         $this->assertEquals('foo', $v);
     }
 
-    public function test_that_running_experiment_with_zero_chance_executes_control()
+    public function testThatRunningExperimentWithZeroChanceExecutesControl()
     {
         $chance = $this->getMockChance();
         $chance->expects($this->once())
             ->method('shouldRun')
             ->willReturn(false);
 
-        $l = new Laboratory;
+        $l = new Laboratory();
         $v = $l->experiment('test experiment')
-            ->control(function () { return 'foo'; })
+            ->control(function () {
+                return 'foo';
+            })
             ->chance($chance)
             ->run();
 

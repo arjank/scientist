@@ -1,57 +1,72 @@
 <?php
 
-use Scientist\Intern;
-use Scientist\Report;
-use Scientist\Experiment;
-use Scientist\Laboratory;
+namespace Scientist;
 
-class InternTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+
+class InternTest extends TestCase
 {
-    public function test_that_intern_can_be_created()
+    public function testThatInternCanBeCreated()
     {
-        $i = new Intern;
+        $i = new Intern();
         $this->assertInstanceOf(Intern::class, $i);
     }
 
-    public function test_that_intern_can_run_an_experiment()
+    public function testThatInternCanRunAnExperiment()
     {
-        $i = new Intern;
-        $e = new Experiment('test experiment', new Laboratory);
-        $e->control(function () { return 'foo'; });
+        $i = new Intern();
+        $e = new Experiment('test experiment', new Laboratory());
+        $e->control(function () {
+            return 'foo';
+        });
         $v = $i->run($e);
         $this->assertInstanceOf(Report::class, $v);
         $this->assertEquals('foo', $v->getControl()->getValue());
     }
 
-    public function test_that_intern_can_match_control_and_trial()
+    public function testThatInternCanMatchControlAndTrial()
     {
-        $i = new Intern;
-        $e = new Experiment('test experiment', new Laboratory);
-        $e->control(function () { return 'foo'; });
-        $e->trial('bar', function () { return 'foo'; });
+        $i = new Intern();
+        $e = new Experiment('test experiment', new Laboratory());
+        $e->control(function () {
+            return 'foo';
+        });
+        $e->trial('bar', function () {
+            return 'foo';
+        });
         $v = $i->run($e);
         $this->assertInstanceOf(Report::class, $v);
         $this->assertTrue($v->getTrial('bar')->isMatch());
     }
 
-    public function test_that_intern_can_mismatch_control_and_trial()
+    public function testThatInternCanMismatchControlAndTrial()
     {
-        $i = new Intern;
-        $e = new Experiment('test experiment', new Laboratory);
-        $e->control(function () { return 'foo'; });
-        $e->trial('bar', function () { return 'bar'; });
+        $i = new Intern();
+        $e = new Experiment('test experiment', new Laboratory());
+        $e->control(function () {
+            return 'foo';
+        });
+        $e->trial('bar', function () {
+            return 'bar';
+        });
         $v = $i->run($e);
         $this->assertInstanceOf(Report::class, $v);
         $this->assertFalse($v->getTrial('bar')->isMatch());
     }
 
-    public function test_that_intern_can_match_and_mismatch_control_and_trial()
+    public function testThatInternCanMatchAndMismatchControlAndTrial()
     {
-        $i = new Intern;
-        $e = new Experiment('test experiment', new Laboratory);
-        $e->control(function () { return 'foo'; });
-        $e->trial('bar', function () { return 'foo'; });
-        $e->trial('baz', function () { return 'baz'; });
+        $i = new Intern();
+        $e = new Experiment('test experiment', new Laboratory());
+        $e->control(function () {
+            return 'foo';
+        });
+        $e->trial('bar', function () {
+            return 'foo';
+        });
+        $e->trial('baz', function () {
+            return 'baz';
+        });
         $v = $i->run($e);
         $this->assertInstanceOf(Report::class, $v);
         $this->assertTrue($v->getTrial('bar')->isMatch());

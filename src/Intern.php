@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Scientist;
 
 use Scientist\Matchers\Matcher;
@@ -78,7 +80,7 @@ class Intern
      * @param \Scientist\Result           $control
      * @param \Scientist\Result[]         $trials
      */
-    protected function determineMatches(Matcher $matcher, Result $control, array $trials = [])
+    protected function determineMatches(Matcher $matcher, Result $control, array $trials = []): void
     {
         foreach ($trials as $trial) {
             if ($matcher->match($control->getValue(), $trial->getValue())) {

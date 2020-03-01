@@ -1,7 +1,13 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Scientist\Chances;
 
 interface Chance
 {
-    public function shouldRun();
+    /**
+     * Determine whether or not the experiment should run
+     */
+    public function shouldRun(): bool;
 }

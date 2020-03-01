@@ -1,44 +1,45 @@
 <?php
 
-use Scientist\Result;
-use Scientist\Report;
+namespace Scientist;
 
-class ReportTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+
+class ReportTest extends TestCase
 {
-    public function test_that_report_can_be_created()
+    public function testThatReportCanBeCreated()
     {
-        $r = new Result;
+        $r = new Result();
         $rep = new Report('foo', $r, []);
 
         $this->assertInstanceOf(Report::class, $rep);
     }
 
-    public function test_that_report_can_hold_experiment_name()
+    public function testThatReportCanHoldExperimentName()
     {
-        $r = new Result;
+        $r = new Result();
         $rp = new Report('foo', $r, []);
         $this->assertEquals('foo', $rp->getName());
     }
 
-    public function test_that_report_can_hold_control_result()
+    public function testThatReportCanHoldControlResult()
     {
-        $r = new Result;
+        $r = new Result();
         $rp = new Report('foo', $r, []);
         $this->assertInstanceOf(Result::class, $rp->getControl());
         $this->assertSame($r, $rp->getControl());
     }
 
-    public function test_that_report_can_hold_trial_result()
+    public function testThatReportCanHoldTrialResult()
     {
-        $r = new Result;
+        $r = new Result();
         $rp = new Report('foo', $r, ['bar' => $r]);
         $this->assertInstanceOf(Result::class, $rp->getTrial('bar'));
         $this->assertSame($r, $rp->getTrial('bar'));
     }
 
-    public function test_that_report_can_hold_multiple_trial_results()
+    public function testThatReportCanHoldMultipleTrialResults()
     {
-        $r = new Result;
+        $r = new Result();
         $rp = new Report('foo', $r, ['bar' => $r, 'baz' => $r]);
         $this->assertInstanceOf(Result::class, $rp->getTrial('bar'));
         $this->assertInstanceOf(Result::class, $rp->getTrial('baz'));

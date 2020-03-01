@@ -1,48 +1,54 @@
 <?php
 
+namespace Scientist\Journals;
+
+use PHPUnit\Framework\TestCase;
 use Scientist\Report;
 use Scientist\Laboratory;
 use Scientist\Experiment;
-use Scientist\Journals\StandardJournal;
 
-class JournalTest extends \PHPUnit\Framework\TestCase
+class JournalTest extends TestCase
 {
-    public function test_that_journals_can_be_created()
+    public function testThatJournalsCanBeCreated()
     {
-        $s = new StandardJournal;
+        $s = new StandardJournal();
         $this->assertInstanceOf(StandardJournal::class, $s);
     }
 
-    public function test_that_a_journal_can_be_added_to_a_laboratory()
+    public function testThatAJournalCanBeAddedToALaboratory()
     {
-        $lab = new Laboratory;
-        $lab->addJournal(new StandardJournal);
-        $this->assertEquals([new StandardJournal], $lab->getJournals());
+        $lab = new Laboratory();
+        $lab->addJournal(new StandardJournal());
+        $this->assertEquals([new StandardJournal()], $lab->getJournals());
     }
 
-    public function test_that_multiple_journals_can_be_added_to_a_laboratory()
+    public function testThatMultipleJournalsCanBeAddedToALaboratory()
     {
-        $lab = new Laboratory;
-        $lab->addJournal(new StandardJournal);
-        $lab->addJournal(new StandardJournal);
-        $this->assertEquals([new StandardJournal, new StandardJournal], $lab->getJournals());
+        $lab = new Laboratory();
+        $lab->addJournal(new StandardJournal());
+        $lab->addJournal(new StandardJournal());
+        $this->assertEquals([new StandardJournal(), new StandardJournal()], $lab->getJournals());
     }
 
-    public function test_that_a_set_of_journals_can_be_assigned_to_a_laboratory()
+    public function testThatASetOfJournalsCanBeAssignedToALaboratory()
     {
-        $lab = new Laboratory;
-        $lab->setJournals([new StandardJournal, new StandardJournal]);
-        $this->assertEquals([new StandardJournal, new StandardJournal], $lab->getJournals());
+        $lab = new Laboratory();
+        $lab->setJournals([new StandardJournal(), new StandardJournal()]);
+        $this->assertEquals([new StandardJournal(), new StandardJournal()], $lab->getJournals());
     }
 
-    public function test_that_journal_receives_experiment_information()
+    public function testThatJournalReceivesExperimentInformation()
     {
-        $lab = new Laboratory;
-        $journal = new StandardJournal;
+        $lab = new Laboratory();
+        $journal = new StandardJournal();
         $lab->addJournal($journal);
 
-        $control = function () { return 'foo'; };
-        $trial = function () { return 'bar'; };
+        $control = function () {
+            return 'foo';
+        };
+        $trial = function () {
+            return 'bar';
+        };
 
         $value = $lab->experiment('foo')
             ->control($control)
@@ -56,14 +62,18 @@ class JournalTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($trial, $journal->getExperiment()->getTrial('bar'));
     }
 
-    public function test_that_journal_receives_result_information()
+    public function testThatJournalReceivesResultInformation()
     {
-        $lab = new Laboratory;
-        $journal = new StandardJournal;
+        $lab = new Laboratory();
+        $journal = new StandardJournal();
         $lab->addJournal($journal);
 
-        $control = function () { return 'foo'; };
-        $trial = function () { return 'bar'; };
+        $control = function () {
+            return 'foo';
+        };
+        $trial = function () {
+            return 'bar';
+        };
 
         $value = $lab->experiment('foo')
             ->control($control)

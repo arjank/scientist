@@ -1,7 +1,11 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Scientist;
 
 use Exception;
+use Throwable;
 
 /**
  * Class Execution
@@ -51,7 +55,7 @@ class Result
     /**
      * Exception thrown by callback.
      *
-     * @var \Exception|null
+     * @var Throwable|null
      */
     protected $exception;
 
@@ -67,6 +71,11 @@ class Result
      */
     protected $context;
 
+    /**
+     * Result constructor.
+     *
+     * @param mixed $context
+     */
     public function __construct($context = null)
     {
         $this->context = $context;
@@ -89,7 +98,7 @@ class Result
      *
      * @return $this
      */
-    public function setValue($value)
+    public function setValue($value): self
     {
         $this->value = $value;
 
@@ -215,9 +224,9 @@ class Result
     /**
      * Get the exception thrown by the callback.
      *
-     * @return Exception|null
+     * @return Throwable|null
      */
-    public function getException()
+    public function getException(): ?Throwable
     {
         return $this->exception;
     }
@@ -225,17 +234,20 @@ class Result
     /**
      * Set the exception thrown by the callback.
      *
-     * @param Exception|null $exception
+     * @param Throwable|null $exception
      *
      * @return $this
      */
-    public function setException($exception)
+    public function setException(?Throwable $exception): self
     {
         $this->exception = $exception;
 
         return $this;
     }
 
+    /**
+     * @return mixed
+     */
     public function getContext()
     {
         return $this->context;

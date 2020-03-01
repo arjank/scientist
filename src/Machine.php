@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Scientist;
 
+use Exception;
 use Throwable;
 
 /**
@@ -21,7 +24,7 @@ class Machine
     /**
      * Parameters to provide to the callback.
      *
-     * @var array
+     * @var mixed[]
      */
     protected $params = [];
 
@@ -43,15 +46,16 @@ class Machine
      * Inject machine dependencies.
      *
      * @param callable $callback
-     * @param array    $params
-     * @param boolean  $muted
+     * @param mixed[] $params
+     * @param boolean $muted
+     * @param null $context
      */
     public function __construct(callable $callback, array $params = [], $muted = false, $context = null)
     {
         $this->callback = $callback;
-        $this->params   = $params;
-        $this->muted    = $muted;
-        $this->result   = new Result($context);
+        $this->params = $params;
+        $this->muted = $muted;
+        $this->result = new Result($context);
     }
 
     /**
@@ -87,10 +91,10 @@ class Machine
     protected function executeCallback()
     {
         if ($this->muted) {
-            return $this->executeMutedCallback();
+            $this->executeMutedCallback();
+        } else {
+            $this->result->setValue(($this->callback)(...$this->params));
         }
-
-        $this->result->setValue(call_user_func_array($this->callback, $this->params));
     }
 
     /**
@@ -101,7 +105,7 @@ class Machine
     protected function executeMutedCallback()
     {
         try {
-            $this->result->setValue(call_user_func_array($this->callback, $this->params));
+            $this->result->setValue(($this->callback)(...$this->params));
         } catch (Throwable $exception) {
             $this->result->setException($exception);
             $this->result->setValue(null);

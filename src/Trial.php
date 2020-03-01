@@ -1,41 +1,47 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Scientist;
 
 class Trial
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $name;
 
-    /**
-     * @var callable
-     */
+    /** @var callable */
     protected $callback;
 
-    /**
-     * @var mixed
-     */
+    /** @var mixed */
     protected $context;
 
-    public function __construct($name, callable $callback, $context)
+    /**
+     * Trial constructor.
+     *
+     * @param string $name
+     * @param callable $callback
+     * @param mixed $context
+     */
+    public function __construct(string $name, callable $callback, $context)
     {
         $this->name = $name;
         $this->callback = $callback;
         $this->context = $context;
     }
 
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
-    public function getCallback()
+    public function getCallback(): callable
     {
         return $this->callback;
     }
 
+    /**
+     * @return mixed
+     */
     public function getContext()
     {
         return $this->context;

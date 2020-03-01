@@ -1,8 +1,10 @@
 <?php
 
-use Scientist\Matchers\ClosureMatcher;
+namespace Scientist\Matchers;
 
-class ClosureMatcherTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+
+class ClosureMatcherTest extends TestCase
 {
     private function getClosure()
     {
@@ -11,19 +13,19 @@ class ClosureMatcherTest extends \PHPUnit\Framework\TestCase
         };
     }
 
-    public function test_that_closure_matcher_can_be_created()
+    public function testThatClosureMatcherCanBeCreated()
     {
         $matcher = new ClosureMatcher($this->getClosure());
         $this->assertInstanceOf(ClosureMatcher::class, $matcher);
     }
 
-    public function test_that_closure_matcher_can_match_values()
+    public function testThatClosureMatcherCanMatchValues()
     {
         $matcher = new ClosureMatcher($this->getClosure());
         $this->assertTrue($matcher->match('uppercase', 'UpperCase'));
     }
 
-    public function test_that_closure_matcher_can_fail_to_match_values()
+    public function testThatClosureMatcherCanFailToMatchValues()
     {
         $matcher = new ClosureMatcher($this->getClosure());
         $this->assertFalse($matcher->match('uppercase', 'LowerCase'));
